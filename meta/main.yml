@@ -1,0 +1,23 @@
+---
+galaxy_info:
+  author: "Andrew Kumanyaev"
+  description: Role for setup mail sandbox application
+  company: Undev
+  license: MIT
+  min_ansible_version: 1.4
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all
+  - name: Debian
+    versions:
+    - all
+  categories:
+  - web
+dependencies:
+  - zzet.common
+  - zzet.rbenv
+  - zzet.postgresql
+  - bennojoy.redis
+  - bennojoy.nginx
+  - zzet.runit

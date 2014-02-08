@@ -1,0 +1,20 @@
+---
+- name: postgresql | ensure user does not have unnecessary privilege (prod)
+  postgresql_user: name={{ postgresql.user }} password={{ postgresql.password }} role_attr_flags=NOSUPERUSER,NOCREATEDB
+  sudo_user: postgres
+  tags:
+    - postgres
+
+- name: postgresql | ensure production database is created
+  postgresql_db: name={{ postgresql.production_name }} owner={{ postgresql.user }}
+                 encoding={{ postgresql.encoding }} lc_collate={{ postgresql.locale }} lc_ctype={{ postgresql.locale }} template='template0'
+                 state=present
+  sudo_user: postgres
+  tags:
+    - postgres
+
+- name: postgresql | ensure user has access to production database
+  postgresql_user: db={{ postgresql.production_name }} name={{ postgresql.user }} password={{ postgresql.password }} priv=ALL
+  sudo_user: postgres
+  tags:
+    - postgres

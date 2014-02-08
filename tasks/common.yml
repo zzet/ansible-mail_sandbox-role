@@ -1,0 +1,27 @@
+---
+- name: Create user.
+  user: home=/rest/u/{{ project_user }} name={{ project_user }} state=present
+  sudo: yes
+
+- name: Create the project directory.
+  file: state=directory path=/rest/u/{{ project_user }}/apps/{{ project_path }}
+  sudo: yes
+
+- name: Update the project directory.
+  file: group={{ project_user }} owner={{ project_user }} mode=755 state=directory path=/rest/u/{{ project_user }}/apps/{{ project_path }}
+  sudo: yes
+
+- name: Create the SSH directory.
+  file: state=directory path=/rest/u/{{ project_user }}/.ssh/ owner={{ project_user }} group={{ project_user }}
+  sudo: true
+  sudo_user: "{{ project_user }}"
+
+- name: Upload SSH authorized_keys.
+  copy: src=authorized_keys dest=/rest/u/{{ project_user }}/.ssh/authorized_keys owner={{ project_user }} group={{ project_user }} mode=0600
+  sudo: true
+  sudo_user: "{{ project_user }}"
+
+- name: Upload SSH known hosts.
+  copy: src=known_hosts dest=/rest/u/{{ project_user }}/.ssh/known_hosts mode=0600
+  sudo: true
+  sudo_user: "{{ project_user }}"

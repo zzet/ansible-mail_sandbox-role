@@ -1,0 +1,7 @@
+---
+- name: nginx | update nginx config
+  template: src=nginx.site.conf.j2 dest=/etc/nginx/sites-available/{{ project_name }} mode=0755
+  sudo: true
+
+- name: nginx | enable app
+  file: src=/etc/nginx/sites-available/{{ project_name }} dest=/etc/nginx/sites-enabled/{{ project_name }} state=link

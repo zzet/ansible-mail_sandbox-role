@@ -1,0 +1,34 @@
+---
+- name: postgresql | ensure user does not have unnecessary privilege (dev)
+  postgresql_user: name={{ postgresql.user }} password={{ postgresql.password }} role_attr_flags=NOSUPERUSER,CREATEDB
+  sudo_user: postgres
+  tags:
+    - postgres
+
+- name: postgresql | ensure dev databases is created
+  postgresql_db: name={{ postgresql.development_name }} owner={{ postgresql.user }}
+                 encoding={{ postgresql.encoding }} lc_collate={{ postgresql.locale }} lc_ctype={{ postgresql.locale }} template='template0'
+                 state=present
+  sudo_user: postgres
+  tags:
+    - postgres
+
+- name: postgresql | ensure user has access to dev databases
+  postgresql_user: db={{ postgresql.development_name }} name={{ postgresql.user }} password={{ postgresql.password }} priv=ALL
+  sudo_user: postgres
+  tags:
+    - postgres
+
+- name: postgresql | ensure test databases is created
+  postgresql_db: name={{ postgresql.test_name }} owner={{ postgresql.user }}
+                 encoding={{ postgresql.encoding }} lc_collate={{ postgresql.locale }} lc_ctype={{ postgresql.locale }} template='template0'
+                 state=present
+  sudo_user: postgres
+  tags:
+    - postgres
+
+- name: postgresql | ensure user has access to test databases
+  postgresql_user: db={{ postgresql.test_name }} name={{ postgresql.user }} password={{ postgresql.password }} priv=ALL
+  sudo_user: postgres
+  tags:
+    - postgres

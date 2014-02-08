@@ -1,0 +1,19 @@
+---
+- name: runit | add service directory
+  file: state=directory path=/etc/sv/{{ project_name }}-web-puma owner={{ project_user }} group={{ project_user }}
+  sudo: true
+
+- name: runit | add service log directory
+  file: state=directory path=/etc/sv/{{ project_name }}-web-puma/log owner={{ project_user }} group={{ project_user }}
+  sudo: true
+
+- name: runit | add run script
+  template: src=runit.site.run.j2 dest=/etc/sv/{{ project_name }}-web-puma/run owner={{ project_user }} group={{ project_user }}
+  sudo: true
+
+- name: runit | add run log script
+  template: src=runit.site.log_run.j2 dest=/etc/sv/{{ project_name }}-web-puma/log/run owner={{ project_user }} group={{ project_user }}
+  sudo: true
+
+- name: runit | symlink dirs to enable runit service
+  file: state=link src=/etc/sv/{{ project_name }}-web-puma dest=/etc/service/{{ project_name }}-web-puma owner={{ project_user }} group={{ project_user }}
