@@ -9,3 +9,6 @@
 - name: Run production tasks
   include: production/main.yml
   when: vm == 0
+
+- name: Run setup application
+  include: app_setup.yml

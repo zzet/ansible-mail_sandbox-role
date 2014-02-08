@@ -1,0 +1,23 @@
+---
+- name: Install bundler
+  gem: name=bundler
+  sudo: true
+  sudo_user: "{{ project_user }}"
+
+- name: Update rbenv
+  shell: bash -lc "rbenv rehash"
+
+- name: Install gems
+  shell: bash -lc "cd /rest/u/{{ project_user }}/apps/{{ project_name }}/current && bundle"
+  sudo: true
+  sudo_user: "{{ project_user }}"
+
+- name: Setup configs
+  shell: bash -lc "cd /rest/u/{{ project_user }}/apps/{{ project_name }}/current && bundle exec rake sandbox:setup"
+  sudo: true
+  sudo_user: "{{ project_user }}"
+
+- name: Prepare database
+  shell: bash -lc "cd /rest/u/{{ project_user }}/apps/{{ project_name }}/current && bundle exec rake db:create db:migrate"
+  sudo: true
+  sudo_user: "{{ project_user }}"
